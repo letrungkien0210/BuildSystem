@@ -1,0 +1,51 @@
+
+<div class="col-md-1">
+  <ul class="nav nav-pills nav-stacked">
+    <li role="presentation" ng-class="{ active: isActive('/')}"><a href="#/">Jenkin hosts</a></li>
+    <li role="presentation" ng-class="{ active: isActive('/all_jobs')}"><a href="#/all_jobs">All jobs</a></li>
+    <li role="presentation" ng-class="{ active: isActive('/vms')}"><a href="#/vms">VMs</a></li>
+  </ul>
+</div>
+<div class="col-md-7">
+  <div class="panel panel-default">
+    <div class="panel-heading">{{message}}</div>
+    <div class="panel-body">
+      <!-- Single button -->
+      <div class="btn-group" style="margin-bottom: 12px;">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{jenkinslabel}}<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" id="dropdownJenkins">
+          <li ng-repeat="jenkin in jenkins">
+            <a href="" ng-click="selectJenkin(jenkin.name)">{{jenkin.name}}</a>
+          </li>
+        </ul>
+      </div>
+      <table class="table table-bordered">
+        <tr>
+          <th>Status</th>
+          <th>Job</th>
+          <th>Subprojects</th>
+          <th>Run on VM</th>
+        </tr>
+        <tbody>
+          <tr ng-repeat="job in jobs">
+            <td>{{job.color}}</td>
+            <td>
+              <a href="{{job.url}}">{{job.name}}</a>              
+            </td>
+            <td>
+              <label ng-repeat="item in job.fingerprint">
+                {{item.original.name}}<br/>
+              </label>
+            </td>
+            <td>
+              <label ng-if="!job.processing">{{job.computer}}</label>
+              <label ng-if="job.processing" class="spinner"><span class="glyphicon glyphicon-repeat"/></label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+
+<div class="col-md-1">
+  <ul class="nav nav-pills nav-stacked">
+    <li role="presentation" ng-class="{ active: isActive('/')}"><a href="#/">Jenkin hosts</a></li>
+    <li role="presentation" ng-class="{ active: isActive('/all_jobs')}"><a href="#/all_jobs">All jobs</a></li>
+    <li role="presentation" ng-class="{ active: isActive('/vms')}"><a href="#/vms">VMs</a></li>
+  </ul>
+</div>
+<div class="col-md-7">
+  <div class="panel panel-default">
+    <div class="panel-heading">{{message}}</div>
+    <div class="panel-body">
+      <div style="margin-bottom: 11px;">
+        <button type="button" class="btn btn-primary" style="width: 95px; text-align: left;" data-toggle="modal" data-target="#addJenkinHost">
+              <span class="glyphicon glyphicon-plus-sign" aria-hidden=true></span> <span class=glyphicon-class>Add</span> 
+            </button>
+        <button type="button" class="btn btn-danger" style="width: 95px; text-align: left;" data-toggle="modal" data-target="#deleteJenkinHost">
+              <span class="glyphicon glyphicon-remove" aria-hidden=true></span> <span class=glyphicon-class >Remove</span> 
+            </button>
+        <button type="button" class="btn btn-success" style="text-align: left;" data-toggle="modal" id="checkStatus" ng-click="checkStatus()">
+              <span class="glyphicon glyphicon-refresh" aria-hidden=true></span> <span class=glyphicon-class>Check status of Jenkins</span> 
+            </button>
+      </div>
+      <table class="table table-bordered">
+        <tr>
+          <th></th>
+          <th>URL</th>
+          <th>Title</th>
+          <th>Status</th>
+        </tr>
+        <tbody>
+          <tr ng-repeat="jenkin in jenkins">
+            <th>
+              <div class="checkbox">
+                <label>
+                      <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..." 
+                      ng-init="jenkinChecked.push({status:status, value:false, jenkin: jenkin})" ng-model="jenkinChecked[$index].value">
+                    </label>
+              </div>
+            </th>
+            <td>
+              <a href="{{jenkin.url}}">{{jenkin.url}}</a>
+            </td>
+            <td>
+              {{jenkin.name}}
+            </td>
+            <td>
+              <label ng-if="!jenkin.processing">{{jenkin.urlStatus}}</label>
+              <label ng-if="jenkin.processing" class="spinner"><span class="glyphicon glyphicon-repeat"/></label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="modal fade" tabindex="-1" role="dialog" id="addJenkinHost">
+        <div class="modal-dialog">
+          <form ng-submit="addJenkin()" id="add-jenkins" data-toggle="validator">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add new Jenkins host</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="jenkinURL">URL</label>
+                  <input type="url" class="form-control" id="jenkinURL" name="jenkinURL" placeholder="URL" ng-model="form.jenkinUrl" required>
+                </div>
+                <div class="form-group">
+                  <label for="jenkinTitle">Jenkin title</label>
+                  <input type="text" class="form-control" id="jenkinTitle" name="jenkinTitle" placeholder="Jenkin title" ng-model="form.jenkinName"
+                    required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </form>
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+      <div class="modal fade" tabindex="-1" role="dialog" id="deleteJenkinHost">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+            </div>
+
+            <div class="modal-body">
+              <p>You are about to remove this jenkin, this procedure is irreversible.</p>
+              <p>Do you want to proceed?</p>
+              <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+              <a class="btn btn-danger btn-ok" ng-click="deleteJenkin()">Remove</a>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
